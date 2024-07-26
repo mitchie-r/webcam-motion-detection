@@ -17,6 +17,7 @@ message = "Dear Dude,\n\nThere's some motion!"
 source = 0
 timeout = 45
 
+
 video_cap = cv2.VideoCapture(source)
 if not video_cap.isOpened():
     print('Unable to open video source:', source)
@@ -28,7 +29,26 @@ size = (frame_w, frame_h)
 
 # Video output file (using MP4-compatible codec)
 video_out_alert_file = 'video_out_alert_1.mp4'
+
+# Check if video exists from a previous motion and delets it if not
+if os.path.exists(video_out_alert_file):
+    os.remove(video_out_alert_file)
+    print("Last video deleted!")
+# Name for the current motion that's happening
+current_motion_video_file = 'current_motion.mp4'
+
+# Checking if the video was already created in a previous motion
+
+if os.path.exists(current_motion_video_file):
+    for vids in range(1, 100):
+        if not os.path.exists(f'current_motion_{vids}.mp4'):
+            current_motion_video_file = f'current_motion_{vids}.mp4'
+            break
+
+
+
 video_out_alert = cv2.VideoWriter(video_out_alert_file, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
+current_motion_vid = cv2.VideoWriter(current_motion_video_file, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
 
 def drawBannerText(frame, text, banner_height_percent=0.08, font_scale=0.8, text_color=(0, 255, 0), font_thickness=2):
     banner_height = int(banner_height_percent * frame.shape[0])
@@ -67,6 +87,7 @@ frame_start = 30
 red = (0, 0, 255)
 yellow = (0, 255, 255)
 green = (0, 255, 0)
+orange = (0, 165, 255)
 
 # Timer for motion detection
 timer_started = False
@@ -80,6 +101,7 @@ while True:
         break
     else:
         frame_erode_c = frame.copy()
+        current_motion = frame.copy()
 
     # Create a foreground mask for the current frame.
     fg_mask = bg_sub.apply(frame)
@@ -105,7 +127,7 @@ while True:
             filtered_contours = [cnt for cnt in contours_erode if cv2.contourArea(cnt) > min_contour_area]
 
             if filtered_contours:
-                cv2.drawContours(frame_fg_mask_erode_c, filtered_contours, -1, green, 2)
+                cv2.drawContours(frame_fg_mask_erode_c, filtered_contours, -1, orange, 2)
                 if not timer_started:
                     start_time = time.time()
                     timer_started = True
@@ -123,21 +145,28 @@ while True:
                 x2, y2 = x1 + w, y1 + h
 
                 # Draw bounding rectangle and banner
+                
                 cv2.rectangle(frame_erode_c, (x1, y1), (x2, y2), yellow, 2)
                 drawBannerText(frame_erode_c, 'Motion Detected', text_color=red)
-
+                cv2.rectangle(current_motion, (x1, y1), (x2, y2), yellow, 2)
+                drawBannerText(current_motion, 'Motion Detected', text_color=red)
             drawBannerText(frame_fg_mask_erode_c, 'Foreground Mask (Eroded + Contours)')
 
         frame_view = np.hstack([frame_fg_mask_erode_c, frame_erode_c])
         frame_view = cv2.resize(frame_view, None, fx=0.7, fy=0.7)
         video_out_alert.write(frame_erode_c)
+        if timer_started:
+            current_motion_vid.write(current_motion)
+            
         cv2.imshow('Composite Frame', frame_view)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+        
 video_cap.release()
 video_out_alert.release()
+current_motion_vid.release()
+if timer_started:
+    send_email_ionos(from_email, password, to_email, subject, message)
 cv2.destroyAllWindows()
 
-send_email_ionos(from_email, password, to_email, subject, message)
