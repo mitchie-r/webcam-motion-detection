@@ -30,21 +30,31 @@ size = (frame_w, frame_h)
 # Video output file (using MP4-compatible codec)
 video_out_alert_file = 'video_out_alert_1.mp4'
 
-# Check if video exists from a previous motion and delets it if not
+# Define the folder for motion detection videos
+motion_detection_folder = 'Motion_Detection'
+
+# Create the folder if it doesn't exist
+if not os.path.exists(motion_detection_folder):
+    os.makedirs(motion_detection_folder)
+
+# Check if video exists from a previous motion and delete it if not
+video_out_alert_file = os.path.join(motion_detection_folder, 'current_motion.mp4')
 if os.path.exists(video_out_alert_file):
     os.remove(video_out_alert_file)
     print("Last video deleted!")
+
 # Name for the current motion that's happening
 current_motion_video_file = 'current_motion.mp4'
 
-# Checking if the video was already created in a previous motion
+# Check if the video was already created in a previous motion
+for vids in range(1, 100):
+    test_file_name = f'current_motion_{vids}.mp4'
+    if not os.path.exists(os.path.join(motion_detection_folder, test_file_name)):
+        current_motion_video_file = test_file_name
+        break
 
-if os.path.exists(current_motion_video_file):
-    for vids in range(1, 100):
-        if not os.path.exists(f'current_motion_{vids}.mp4'):
-            current_motion_video_file = f'current_motion_{vids}.mp4'
-            break
-
+# Construct the full path for the current motion video
+current_motion_video_file = os.path.join(motion_detection_folder, current_motion_video_file)
 
 
 video_out_alert = cv2.VideoWriter(video_out_alert_file, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
@@ -55,7 +65,7 @@ def drawBannerText(frame, text, banner_height_percent=0.08, font_scale=0.8, text
     cv2.rectangle(frame, (0, 0), (frame.shape[1], banner_height), (0, 255, 0), thickness=-1)
     left_offset = 20
     location = (left_offset, int(10 + (banner_height_percent * frame.shape[0]) / 2))
-    cv2.putText(frame, text, location, cv2.FONT_HERSHEY_SIMPLEX, font_scale, text_color, font_thickness, cv2.LINE_AA)
+    cv2.putText(frame, text, location, cv2.FONT_HERSHEY_SCRIPT_COMPLEX, font_scale, text_color, font_thickness, cv2.LINE_AA)
 
 def send_email_ionos(from_email, password, to_email, subject, body):
     """Sends an email using an IONOS business email account."""
@@ -77,8 +87,8 @@ def send_email_ionos(from_email, password, to_email, subject, body):
 
 # Background subtraction and parameters
 bg_sub = cv2.createBackgroundSubtractorKNN(history=500, dist2Threshold=400.0)
-ksize = (10, 10)
-min_contour_area = 1200
+ksize = (7, 7)
+min_contour_area = 750
 max_contours = 3
 frame_count = 0
 frame_start = 30
@@ -91,7 +101,8 @@ orange = (0, 165, 255)
 
 # Timer for motion detection
 timer_started = False
-start_time = None
+start_time = time.time()
+elapsed_time = time.time()
 
 # Process video frames.
 while True:
@@ -132,11 +143,6 @@ while True:
                     start_time = time.time()
                     timer_started = True
                     print("Timer Started!")
-                elapsed_time = time.time() - start_time
-                print(elapsed_time)
-                if elapsed_time > timeout:
-                   break
-
                 # Sort the filtered contours by area (descending)
                 contours_sorted = sorted(filtered_contours, key=cv2.contourArea, reverse=True)
 
@@ -157,9 +163,10 @@ while True:
         video_out_alert.write(frame_erode_c)
         if timer_started:
             current_motion_vid.write(current_motion)
-            
+            elapsed_time = time.time() - start_time
+            if elapsed_time > timeout:
+                break
         cv2.imshow('Composite Frame', frame_view)
-
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         
