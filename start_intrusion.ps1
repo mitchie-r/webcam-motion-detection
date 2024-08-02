@@ -17,5 +17,5 @@ while ($true) {
         Write-Output "$(Get-Date -Format "yyyy-MM-dd HH:mm:ss") - Intrusion_Detection.py already running, skipping..."
     }
 
-    Start-Sleep -Seconds 300 
+    Start-Sleep -Seconds 150
 }
