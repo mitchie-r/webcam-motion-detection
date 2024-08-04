@@ -12,7 +12,9 @@ start_intrusion.bat
 /start_intrusion.bat
 start_intrusion.bat/
 requirements.txt
-
+start_intrusion.ps1
+/start_intrusion.ps1
+start_intrusion.ps1/
 
 
 

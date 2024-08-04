@@ -165,8 +165,8 @@ def motion_detection(ksize, min_contour_area, source):
             current_motion_video_file = test_file_name
             break
 
-        # Construct the full path for the current motion video
-        current_motion_video_file = os.path.join(motion_detection_folder, current_motion_video_file)
+    # Construct the full path for the current motion video
+    current_motion_video_file = os.path.join(motion_detection_folder, current_motion_video_file)
 
 
     video_out_alert = cv2.VideoWriter(video_out_alert_file, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
@@ -260,5 +260,5 @@ if __name__ == '__main__':
     #cam_choice = camera_choice(cams)
     #ksize = kernel_choice()
     #min_area = choose_min_area()
-    motion_detection((7, 7), 700, 0)
+    motion_detection((7, 7), 500, 0)
     
