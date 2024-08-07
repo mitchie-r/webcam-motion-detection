@@ -1,54 +1,80 @@
-This is a program that turns a web cam into a security camera and will create separate motion files as they occur in real time.
-Must have Python and Conda installed. Install requirements in your environment by running:
-pip -r requirements.txt
+# Intrusion Detection System
 
-Intrusion Detection System
-This system uses OpenCV to detect motion from your webcam and sends email alerts when motion is detected.
+This system uses OpenCV to turn your webcam into a security camera, detecting motion and sending email alerts.
 
-Setup
-Environment Variables (Windows):
+## Setup
 
-To securely store sensitive information (email credentials and script path), create the following environment variables on your Windows system:
+### Prerequisites
 
-EMAIL_MOTION: Your email address (for sending alerts).
+1. **Anaconda (or Miniconda):** Download and install from [https://www.anaconda.com/download/](https://www.anaconda.com/download/) (Choose the appropriate installer for your system - Windows, macOS, or Linux).
+2. **Python:** If you installed Anaconda, Python is already included. Otherwise, download and install from [https://www.python.org/downloads/](https://www.python.org/downloads/).
 
-EMAIL_PASSWORD: Your email password.
+### Installation
 
-TO_EMAIL_MOTION: The email address where alerts should be sent.
+1. **Open a terminal or command prompt.** 
+2. **Navigate to the project directory:**
+   ```bash
+   cd path/to/your_project_directory/opencv_for_beginners/Webcam-motion-detection
 
-OPENCV_PATH:  The base path of your OpenCV installation. For example:
+   pip install -r requirements.txt
 
-C:\Users\<your_username>\Documents\...\<opencv_for_beginners>
-(Replace <your_username> with your actual username, and complete the path to your opencv_for_beginners directory.)
+   Absolutely! Here's the revised README file, focusing on the key changes you mentioned:
 
-PowerShell Script:
+Markdown
+# Intrusion Detection System
 
-Open the start_intrusion.ps1 PowerShell script.
+This system uses OpenCV to turn your webcam into a security camera, detecting motion and sending email alerts.
 
-Modify the $scriptPath variable to include the rest of the path to your Intrusion_Detection.py script, like this:
+## Setup
 
-PowerShell
-$scriptPath = "$env:OPENCV_PATH\opencv_for_beginners\Webcam-motion-detection\Intrusion_Detection.py"
+### Prerequisites
+
+1. **Anaconda (or Miniconda):** Download and install from [https://www.anaconda.com/download/](https://www.anaconda.com/download/) (Choose the appropriate installer for your system - Windows, macOS, or Linux).
+2. **Python:** If you installed Anaconda, Python is already included. Otherwise, download and install from [https://www.python.org/downloads/](https://www.python.org/downloads/).
+
+### Installation
+
+1. **Open a terminal or command prompt.** 
+2. **Navigate to the project directory:**
+   ```bash
+   cd path/to/your_project_directory/opencv_for_beginners/Webcam-motion-detection
 Use code with caution.
 
-Save the script.
+Install required packages:
+Bash
+pip install -r requirements.txt
+Use code with caution.
+
+Environment Variables (Windows)
+To securely store sensitive information (email credentials), create the following environment variables:
+
+EMAIL_MOTION: Your email address.
+EMAIL_PASSWORD: Your email password.
+TO_EMAIL_MOTION: The email address where alerts should be sent.
 
 Running the System
-Activate Environment: Make sure your Python environment is activated (where OpenCV is installed).
-Execute: Run the start_intrusion.ps1 PowerShell script.
-Code Overview
-The Intrusion_Detection.py script does the following:
+Open a terminal or command prompt.
+Navigate to the project directory:
+
+cd path/to/your_project_directory/opencv_for_beginners/Webcam-motion-detection
+
+Execute the Python script:
+
+python Intrusion_Detection.py
+
+The Intrusion_Detection.py script:
 
 Captures video: Accesses your webcam to capture frames.
-Detects motion: Uses background subtraction and image processing techniques to identify movement in the video stream.
-Sends email alerts: When motion is detected, it triggers an email notification using your configured environment variables.
-Important Note: This README assumes you have OpenCV installed and a basic understanding of setting up environment variables on Windows. If you need assistance with these steps, please refer to relevant tutorials or documentation.
+Detects motion: Uses background subtraction and image processing to identify movement.
+Sends email alerts: When motion is detected, it triggers an email notification.
+Important Note
+This README assumes a basic understanding of setting up environment variables. If you need assistance, please refer to relevant tutorials or documentation.
 
 Directory Structure
 
 your_project_directory
 ├── opencv_for_beginners
-│   ├── Webcam-motion-detection          
+│   ├── Webcam-motion-detection        
 │   │   ├── Intrusion_Detection.py     <-- Main Python script
-│   │   └── start_intrusion.ps1        <-- PowerShell script to start the system
+│   │   └── requirements.txt           <-- List of required Python packages
 ├── ...other files and folders...

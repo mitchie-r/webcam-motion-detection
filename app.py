@@ -14,6 +14,7 @@ to_email = os.environ.get("TO_EMAIL_MOTION")
 subject = "Motion Detected!"
 message = "Dear Dude,\n\nThere's some motion!"
 
+
 def list_available_cameras():
     """
     Lists available cameras along with their properties.
@@ -66,7 +67,7 @@ def drawBannerText(frame, text, banner_height_percent=0.08, font_scale=0.8, text
     cv2.rectangle(frame, (0, 0), (frame.shape[1], banner_height), (0, 255, 0), thickness=-1)
     left_offset = 20
     location = (left_offset, int(10 + (banner_height_percent * frame.shape[0]) / 2))
-    cv2.putText(frame, text, location, cv2.FONT_HERSHEY_SCRIPT_COMPLEX, font_scale, text_color, font_thickness, cv2.LINE_AA)
+    cv2.putText(frame, text, location, cv2.FONT_HERSHEY_SIMPLEX, font_scale, text_color, font_thickness, cv2.LINE_AA)
 
 def kernel_choice():
     while True:  # Loop until valid input is received
@@ -256,9 +257,12 @@ def motion_detection(ksize, min_contour_area, source):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    #cams = list_available_cameras()
-    #cam_choice = camera_choice(cams)
-    #ksize = kernel_choice()
-    #min_area = choose_min_area()
-    motion_detection((7, 7), 500, 0)
+    cams = list_available_cameras()
+    cam_choice = camera_choice(cams)
+    ksize = kernel_choice()
+    min_area = choose_min_area()
+    while True:
+        motion_detection(ksize, min_area, cam_choice)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
     
