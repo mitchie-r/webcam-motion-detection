@@ -246,7 +246,8 @@ def motion_detection(ksize, min_contour_area, source):
                     drawBannerText(current_motion, 'Motion Detected', text_color=red)
                 drawBannerText(frame_fg_mask_erode_c, 'Foreground Mask (Eroded + Contours)')
 
-            frame_view = np.hstack([frame_fg_mask_erode_c, frame_erode_c])
+            #frame_view = np.hstack([frame_fg_mask_erode_c, frame_erode_c])
+            frame_view = frame_erode_c
             frame_view = cv2.resize(frame_view, None, fx=0.7, fy=0.7)
             video_out_alert.write(frame_erode_c)
             if timer_started:
@@ -254,7 +255,7 @@ def motion_detection(ksize, min_contour_area, source):
                 elapsed_time = time.time() - start_time
                 if elapsed_time > timeout:
                     break
-            cv2.imshow('Composite Frame', frame_view)
+            cv2.imshow('Camera View', frame_view)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             
