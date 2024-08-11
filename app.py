@@ -108,7 +108,7 @@ def choose_min_area():
 
 
 # Function to send an email if you would like to add it, this one is for Ionos email accounts
-def send_email_ionos(from_email, password, to_email, subject, body):
+def send_email_ionos(from_email, password, to_email, subject, body, smtp_server, smtp_port):
     """Sends an email using an IONOS business email account."""
     msg = MIMEMultipart()
     msg['From'] = from_email
@@ -117,7 +117,7 @@ def send_email_ionos(from_email, password, to_email, subject, body):
     msg.attach(MIMEText(body, 'plain'))
 
     try:
-        server = smtplib.SMTP('smtp.ionos.com', 587)
+        server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
         server.login(from_email, password)
         server.sendmail(from_email, to_email, msg.as_string())
@@ -262,7 +262,7 @@ def motion_detection(ksize, min_contour_area, source):
     video_out_alert.release()
     current_motion_vid.release()
     if timer_started:
-        send_email_ionos(from_email, password, to_email, subject, message)
+        send_email_ionos(from_email, password, to_email, subject, message, 'smtp.ionos.com', 587)
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
