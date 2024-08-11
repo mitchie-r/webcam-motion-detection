@@ -14,10 +14,12 @@ This system uses OpenCV to turn your webcam into a security camera, detecting mo
 1. **Open a terminal or command prompt.** 
 2. **Navigate to the project directory:**
    ```bash
-   cd path/to/your_project_directory/opencv_for_beginners/Webcam-motion-detection
+   cd path/to/your_project_directory
 
 
 pip install -r requirements.txt
+
+git clone https://github.com/mitchredd77/webcam-motion-detection
 
 Environment Variables (Windows)
 To securely store sensitive information (email credentials), create the following environment variables:
@@ -33,7 +35,7 @@ Navigate to the project directory:
 
 Bash
 
-cd path/to/your_project_directory/opencv_for_beginners/Webcam-motion-detection
+cd path/to/your_project_directory
 
 3. Execute the Python script:
 

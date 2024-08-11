@@ -14,7 +14,7 @@ to_email = os.environ.get("TO_EMAIL_MOTION")
 subject = "Motion Detected!"
 message = "Dear Dude,\n\nThere's some motion!"
 
-
+# Function that finds all cameras on the system
 def list_available_cameras():
     """
     Lists available cameras along with their properties.
@@ -51,17 +51,19 @@ def list_available_cameras():
 
     return camera_list
 
+# Function that offers a choice of which camera to start the motion detection with
 def camera_choice(camera_list):
     while True:  # Loop until valid input is received
         choice = input(f"""Choose a camera to use (1, 2, 3, etc):
                          {', '.join([f'Camera {camera["index"]+1}: {camera["width"]}x{camera["height"]} @ {camera["fps"]}fps' for camera in camera_list])}
-                         ###############################""")
+                         ###############################   """)
         # Check if choice is a valid number between 1 and the total number of cameras
         if choice.isdigit() and 1 <= int(choice) <= len(camera_list):
             return int(choice) - 1
         else:
             print("Invalid choice. Please try again.")
 
+# Draws banner on video
 def drawBannerText(frame, text, banner_height_percent=0.08, font_scale=0.8, text_color=(0, 255, 0), font_thickness=2):
     banner_height = int(banner_height_percent * frame.shape[0])
     cv2.rectangle(frame, (0, 0), (frame.shape[1], banner_height), (0, 255, 0), thickness=-1)
@@ -69,6 +71,8 @@ def drawBannerText(frame, text, banner_height_percent=0.08, font_scale=0.8, text
     location = (left_offset, int(10 + (banner_height_percent * frame.shape[0]) / 2))
     cv2.putText(frame, text, location, cv2.FONT_HERSHEY_SIMPLEX, font_scale, text_color, font_thickness, cv2.LINE_AA)
 
+
+# Function to choose the kernel size of (3, 3), (5, 5), (7, 7), (9, 9)
 def kernel_choice():
     while True:  # Loop until valid input is received
         choice = input("""################################
@@ -78,7 +82,7 @@ def kernel_choice():
                             2. (5, 5)
                             3. (7, 7)
                             4. (9, 9)
-                        ###############################""")
+                        ###############################   """)
         # Check if choice is a valid number between 1 and 4
         if choice.isdigit() and 1 <= int(choice) <= 4: 
             choice = int(choice)
@@ -87,13 +91,14 @@ def kernel_choice():
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
 
+# Function to choose the minimum area for motion. The smaller it is, the more sensitive the camera is to motion.
 def choose_min_area():
     while True:  # Loop until valid input is received
         choice = input("""################################
                         What is the minimum area of your motion? 
                         Please choose between 50 and 1200
                         the lower the number, the more motion sensitvity
-                        ###############################""")
+                        ###############################    """)
         # Check if choice is a valid number between 1 and 4
         if choice.isdigit() and 50 <= int(choice) <= 1200: 
             choice = int(choice)
@@ -101,6 +106,8 @@ def choose_min_area():
         else:
             print("Invalid choice. Please enter a number between 50 and 1200.")
 
+
+# Function to send an email if you would like to add it, this one is for Ionos email accounts
 def send_email_ionos(from_email, password, to_email, subject, body):
     """Sends an email using an IONOS business email account."""
     msg = MIMEMultipart()
@@ -119,6 +126,8 @@ def send_email_ionos(from_email, password, to_email, subject, body):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
+# Main application that will be looped until interrupted
 def motion_detection(ksize, min_contour_area, source):
     # Video source and settings
     source = source
