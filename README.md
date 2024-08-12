@@ -6,10 +6,10 @@ This system uses OpenCV to turn your webcam into a security camera, detecting mo
 
 ### Prerequisites
 
-1. **Anaconda (or Miniconda):** Download and install from [https://www.anaconda.com/download/](https://www.anaconda.com/download/) (Choose the appropriate installer for your system - Windows, macOS, or Linux).
-2. **Python:** If you installed Anaconda, Python is already included. Otherwise, download and install from [https://www.python.org/downloads/](https://www.python.org/downloads/).
+1. **Python:** If you installed Anaconda, Python is already included. Otherwise, download and install from [https://www.python.org/downloads/](https://www.python.org/downloads/).
 
-### Installation
+2. **Visual Studio Code:** 
+(https://code.visualstudio.com/download)
 
 1. **Open a terminal or command prompt.** 
 2. **Navigate to the project directory:**
@@ -17,9 +17,26 @@ This system uses OpenCV to turn your webcam into a security camera, detecting mo
    cd path/to/your_project_directory
 
 
+Download Python:
+https://www.python.org/downloads/
+
+Download Visual Studio code:
+https://code.visualstudio.com/download
+
+Git:
+https://git-scm.com/downloads
+
+Download Repository:
+https://github.com/mitchredd77/webcam-motion-detection
+
+Install Requirements:
 pip install -r requirements.txt
 
-git clone https://github.com/mitchredd77/webcam-motion-detection
+Create Virtual Environment:
+python -m venv opencv-env
+
+Activate Virtual Environment:
+.\opencv-env\Scripts\activate
 
 Environment Variables (Windows)
 To securely store sensitive information (email credentials), create the following environment variables:
